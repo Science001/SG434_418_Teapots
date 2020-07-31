@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "SG434 - Data Storage and Analytics Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "react": "cd client && npm run react",
+    "electron": "cd client && npm run electron",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sih",
+    "sih-2020",
+    "sikkim",
+    "school",
+    "dashboard",
+    "analysis"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "pg": "^8.3.0"
+  }
+}
