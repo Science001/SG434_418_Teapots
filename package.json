@@ -2,9 +2,12 @@
   "name": "server",
   "version": "1.0.0",
   "description": "SG434 - Data Storage and Analytics Dashboard",
-  "main": "server.js",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "node server.js",
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node .",
     "react": "cd client && npm run react",
     "electron": "cd client && npm run electron",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,5 +28,13 @@
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "pg": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.7",
+    "@types/morgan": "^1.9.1",
+    "@types/node": "^14.0.27",
+    "@types/pg": "^7.14.4",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.7"
   }
 }
