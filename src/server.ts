@@ -1,33 +1,40 @@
 import express from 'express';
-import { Pool } from 'pg';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import * as dotenv from 'dotenv';
-
 dotenv.config();
 
 import api from './api'
 
-const app = express()
-const PORT = process.env.PORT
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
+import { createConnection } from "typeorm";
+import { User } from "./entity/user.entity";
+
+
+createConnection({
+    type: "postgres",
+    url: process.env.DATABASE_URL,
+    entities: [User],
+    logging: ['error'],
+    synchronize: true,
+    ssl: true,
+}).then(connection => {
+
+    const app = express()
+    app.use(bodyParser.json())
+
+    if (process.env.NODE_ENV !== "production") {
+        app.use(morgan('dev'))
+    }
+
+    const userRepo = connection.getRepository(User)
+
+    app.get('/', (_req, res) => {
+        res.send('SG434 - Data Storage and Analytics Dashboard')
+    })
+
+    app.use('/api', api)
+
+    const PORT = process.env.PORT
+    app.listen(PORT, () => console.log(`SG434_418_Teapots running at ${PORT}`))
+
 })
-
-if (process.env.NODE_ENV !== 'production') {
-    app.use(morgan('dev'))
-}
-else {
-    app.use(morgan('combined'))
-}
-
-app.use(bodyParser.json())
-
-app.get('/', (_req, res) => {
-    res.send('SG434 - Data Storage and Analytics Dashboard')
-})
-
-app.use('/api', api)
-
-app.listen(PORT, () => console.log(`SG434_418_Teapots running at ${PORT}`))
