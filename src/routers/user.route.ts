@@ -9,11 +9,4 @@ user.get('/', async (_req, res) => {
     res.send({ users });
 })
 
-user.post('/', async (req, res) => {
-    const { name } = req.body;
-    const userEntity = await getRepository(User).create({ name })
-    await getRepository(User).save(userEntity)
-    res.send({ message: "Created Successfully" })
-})
-
 export default user;
