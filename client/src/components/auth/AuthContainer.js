@@ -5,7 +5,8 @@ import { useDispatch, connect } from 'react-redux'
 
 import './css/AuthContainer.css'
 import { loginAction } from '../../redux/auth/actions';
-import Loader from '../../sharedComponents/Loader';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Avatar from '@material-ui/core/Avatar';
 
 
@@ -22,12 +23,12 @@ const AuthContainer = ({ isLoginOnProcess, errorMsg }) => {
 
   const dispatch = useDispatch()
 
-  const handleLogin = (e) => {
-    e.preventDefault()
+  const handleLogin = () => {
     const body = {
       email: email,
       password: password
     }
+    console.log("Trying to log in")
     dispatch(loginAction(body))
   }
 
@@ -68,14 +69,14 @@ const AuthContainer = ({ isLoginOnProcess, errorMsg }) => {
         />
         <span className="error">{errorMsg}</span>
         <Button
-          type="submit"
           fullWidth
           variant="contained"
           color="primary"
           onClick={handleLogin}
+          disabled={isLoginOnProcess}
           style={{ height: '3rem', marginTop: '1.5rem' }}
         >
-          {isLoginOnProcess ? <Loader /> : 'Sign In'}
+          {isLoginOnProcess ? <CircularProgress /> : 'Sign In'}
         </Button>
       </form>
     </div>

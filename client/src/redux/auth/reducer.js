@@ -1,20 +1,24 @@
-const { SET_LOGIN_PROCESS_ON, LOGIN_USER, LOGIN_ERR, LOGOUT_USER } = require("./actions");
+export const LOGIN_USER = 'LOGIN_USER'
+export const LOGIN_ERR = 'LOGIN_ERR'
+export const LOGOUT_USER = 'LOGOUT_USER'
+export const SET_LOGIN_PROCESS_ON = 'SET_LOGIN_PROCESS_ON'
 
 const initialState = {
     currentUser: null,
+    isInitializing: true,
     isLoginOnProcess: false,
 };
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_LOGIN_PROCESS_ON:
-            return { ...state, isLoginOnProscess: true };
         case LOGIN_USER:
             return {
-                ...state,
                 currentUser: action.payload,
+                isInitializing: false,
                 isLoginOnProcess: false,
             };
+        case SET_LOGIN_PROCESS_ON:
+            return { ...state, isLoginOnProcess: true };
         case LOGIN_ERR:
             return { ...state, isLoginOnProcess: false };
         case LOGOUT_USER:

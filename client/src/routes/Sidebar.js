@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux'
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -20,6 +21,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Tooltip } from '@material-ui/core';
 import Dashboard from '../components/dashboard/Dashboard';
+import { logoutAction } from '../redux/auth/actions';
 // import { createMuiTheme } from '@material-ui/core/styles';
 
 // const defaultTheme = createMuiTheme();
@@ -100,8 +102,13 @@ const useStyles = makeStyles((theme) => ({
 const Sidebar = () => {
   const classes = useStyles();
   const theme = useTheme();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0)
+
+  const logOut = () => {
+    dispatch(logoutAction())
+  }
 
   return (
     <div className={classes.root}>
@@ -167,7 +174,7 @@ const Sidebar = () => {
           position: 'absolute',
           marginBottom: '1em'
         }}>
-          <ListItem button key={2} style={{ fontSize: '1.2em' }}>
+          <ListItem button key={2} style={{ fontSize: '1.2em' }} onClick={logOut}>
             <Tooltip title='Logout'>
               <ListItemIcon><ExitToAppIcon style={{ color: 'red', fontSize: '1.85em' }} /></ListItemIcon>
             </Tooltip>

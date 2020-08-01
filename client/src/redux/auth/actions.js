@@ -1,10 +1,5 @@
 import axiosInstance from '../../utils/axiosInstance';
-import { showToast } from '../toast/actions';
-
-export const SET_LOGIN_PROCESS_ON = 'SET_LOGIN_PROCESS_ON'
-export const LOGIN_USER = 'LOGIN_USER'
-export const LOGIN_ERR = 'LOGIN_ERR'
-export const LOGOUT_USER = 'LOGOUT_USER'
+import { SET_LOGIN_PROCESS_ON, LOGIN_USER, LOGIN_ERR, LOGOUT_USER } from "./reducer";
 
 export const setLoginProcessOn = () => {
   return {
@@ -37,10 +32,10 @@ export const whoami = () => {
     if (token) {
       axiosInstance
         .get(`/user/me`)
-        .then((res) => {
-          dispatch(loginUser(res.data.data));
+        .then(res => {
+          dispatch(loginUser(res.data));
         })
-        .catch((err) => {
+        .catch(err => {
           if (err.response) {
             console.log(err.response);
             if (err.response.data.code === 401) {
@@ -57,20 +52,28 @@ export const whoami = () => {
 
 export const loginAction = (body) => {
   return (dispatch) => {
+
+    dispatch(setLoginProcessOn());
     axiosInstance
       .post('/auth/login', body)
       .then((res) => {
         if (res.data) {
-          localStorage.setItem('token', res.data.data.token);
-          console.log(res.data.data);
-          dispatch(loginUser(res.data.data));
+          localStorage.setItem('token', res.data.token);
+          console.log(res.data);
+          dispatch(loginUser(res.data));
         }
       })
       .catch((err) => {
         if (err.response) {
           dispatch(loginErr());
-          dispatch(showToast(err.response.data.message, true));
         }
       });
   };
 };
+
+export const logoutAction = () => {
+  return (dispatch) => {
+    localStorage.removeItem('token')
+    dispatch(logoutUser())
+  }
+}

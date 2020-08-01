@@ -1,35 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux'
+import React, { useEffect } from 'react';
+import { connect, useDispatch } from 'react-redux'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import axiosInstance from '../utils/axiosInstance'
-import { showToast } from '../redux/toast/actions';
+import { makeStyles } from '@material-ui/core/styles';
 import AuthContainer from '../components/auth/AuthContainer';
 import Sidebar from './Sidebar'
+import { whoami } from '../redux/auth/actions';
 
-const MainContainer = () => {
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.auth.currentUser,
+        isInitializing: state.auth.isInitializing,
+    }
+}
 
-    const [message, setMessage] = useState('Loading...')
+const useStyles = makeStyles((theme) => ({
+    fullScreenDiv: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "100vh",
+    },
+}));
+
+const MainContainer = ({ currentUser, isInitializing }) => {
+
+    const classes = useStyles();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        axiosInstance.get('/')
-            .then(res => {
-                console.log(res);
-                setMessage(res.data)
-                dispatch(showToast('Success'))
-            })
-            .catch(err => {
-                console.error(err);
-                setMessage('Error requesting /api')
-            })
+        dispatch(whoami())
     }, [dispatch])
 
-    return (
-        <div>
-            {/*<AuthContainer /> */}
-            <Sidebar />
+    return isInitializing ?
+        <div className={classes.fullScreenDiv}>
+            <CircularProgress />
         </div>
-    );
+        : currentUser ? <Sidebar /> : <AuthContainer />
 }
 
-export default MainContainer;
+export default connect(mapStateToProps)(MainContainer);
