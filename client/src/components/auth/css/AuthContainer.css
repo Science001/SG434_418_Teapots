@@ -1,0 +1,39 @@
+.container {
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  text-align: center;
+}
+
+.button {
+  margin-top: 1em;
+  height: 4rem !important;
+  background-color: #6772e5;
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 7px 14px;
+}
+
+.button:hover {
+  background-color: #5469d4;
+}
+
+form {
+  width: 380px;
+  margin: 2em auto;
+  padding: 2rem;
+  background: #fafafa;
+  border: 1px solid #ebebeb;
+  box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+  border-radius: 35px;
+  padding-bottom: 4rem;
+}
+
+h1 {
+  text-align: center;
+}
+
+.error {
+  color: red;
+}

@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux'
 
 import axiosInstance from '../utils/axiosInstance'
 import { showToast } from '../redux/toast/actions';
+import AuthContainer from '../components/auth/AuthContainer';
+import Sidebar from './Sidebar'
 
 const MainContainer = () => {
 
@@ -24,8 +26,8 @@ const MainContainer = () => {
 
     return (
         <div>
-            <h1>{"418 Teapots"}</h1>
-            <h3>{message}</h3>
+            {/*<AuthContainer /> */}
+            <Sidebar />
         </div>
     );
 }
