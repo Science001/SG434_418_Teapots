@@ -1,12 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, OneToOne, JoinColumn } from "typeorm";
 
 import { Posting } from "./posting.entity";
 import { Result } from "./result.entity";
+import { User } from "./user.entity";
 
 @Entity()
 export class Teacher {
     @PrimaryGeneratedColumn("uuid")
     id: number;
+
+    @OneToOne(() => User)
+    @JoinColumn()
+    user: User;
 
     @Column("text")
     name: string;

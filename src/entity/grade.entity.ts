@@ -1,7 +1,6 @@
 import {
     Entity,
-    Column,
-    PrimaryGeneratedColumn,
+    PrimaryColumn,
     OneToMany,
 } from "typeorm";
 
@@ -12,11 +11,9 @@ import { Result } from "./result.entity";
 
 @Entity()
 export class Grade {
-    @PrimaryGeneratedColumn("uuid")
-    id: number;
 
-    @Column("varchar", { length: 5 })
-    name: string;
+    @PrimaryColumn('integer', { width: 2 })
+    value: number;
 
     @OneToMany(() => Subject, (subject) => subject.grade)
     subjects: Subject[];
