@@ -18,7 +18,7 @@ import { Teacher } from "./teacher.entity";
 @Entity()
 export class Result {
     @PrimaryGeneratedColumn("uuid")
-    id: number;
+    id: string;
 
     @Column("float")
     marks: number;

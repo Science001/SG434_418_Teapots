@@ -11,10 +11,10 @@ export class Posting {
     @Column("integer")
     year: number;
 
-    @ManyToOne(() => School, school => school.postings)
+    @ManyToOne(() => School, school => school.postings, { eager: true })
     school: School;
 
-    @ManyToOne(() => Grade, grade => grade.postings)
+    @ManyToOne(() => Grade, grade => grade.postings, { eager: true })
     grade: Grade;
 
     @ManyToOne(() => Teacher, (teacher) => teacher.postings)

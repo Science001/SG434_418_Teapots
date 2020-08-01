@@ -7,9 +7,9 @@ import { User } from "./user.entity";
 @Entity()
 export class Teacher {
     @PrimaryGeneratedColumn("uuid")
-    id: number;
+    id: string;
 
-    @OneToOne(() => User)
+    @OneToOne(() => User, { cascade: true })
     @JoinColumn()
     user: User;
 
@@ -22,7 +22,7 @@ export class Teacher {
     @Column({ default: false })
     hasResigned: boolean;
 
-    @OneToMany(() => Posting, posting => posting.teacher)
+    @OneToMany(() => Posting, posting => posting.teacher, { cascade: true })
     postings: Posting[];
 
     @OneToMany(() => Result, (result) => result.insertedBy)

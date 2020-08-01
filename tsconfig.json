@@ -10,7 +10,7 @@
         "module": "commonjs",
         "esModuleInterop": true,
         "target": "es5",
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "moduleResolution": "node",
         "sourceMap": true,
         "rootDir": "src",

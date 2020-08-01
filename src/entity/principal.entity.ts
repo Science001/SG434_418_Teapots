@@ -8,7 +8,7 @@ export class Principal {
     @PrimaryGeneratedColumn('uuid')
     id: number;
 
-    @OneToOne(() => User)
+    @OneToOne(() => User, { cascade: true })
     @JoinColumn()
     user: User
 
@@ -19,7 +19,6 @@ export class Principal {
     hasResigned: boolean;
 
     @OneToOne(() => School, school => school.principal)
-    @JoinColumn()
     school: School;
 
 }

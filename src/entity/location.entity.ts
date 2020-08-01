@@ -4,7 +4,7 @@ import { School } from "./school.entity";
 @Entity()
 export class Location {
     @PrimaryGeneratedColumn("uuid")
-    id: number;
+    id: string;
 
     @Column("varchar", { length: 50 })
     district: string;

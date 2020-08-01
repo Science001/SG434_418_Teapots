@@ -11,7 +11,7 @@ import { Result } from "./result.entity";
 @Entity()
 export class Subject {
     @PrimaryGeneratedColumn("uuid")
-    id: number;
+    id: string;
 
     @Column("varchar", { length: 50 })
     name: string;

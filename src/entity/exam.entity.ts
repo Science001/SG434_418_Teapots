@@ -4,7 +4,7 @@ import { Result } from "./result.entity";
 @Entity()
 export class Exam {
     @PrimaryGeneratedColumn("uuid")
-    id: number;
+    id: string;
 
     @Column("text")
     name: string;

@@ -14,7 +14,7 @@ type Gender = 'male' | 'female' | 'other';
 @Entity()
 export class Student {
     @PrimaryGeneratedColumn("uuid")
-    id: number;
+    id: string;
 
     @Column("varchar", { length: 50 })
     name: string;

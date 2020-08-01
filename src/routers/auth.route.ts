@@ -1,26 +1,54 @@
+import jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import express from "express";
+
 import { User } from "../entity/user.entity";
-import jwt from "jsonwebtoken";
+import { Principal } from "../entity/principal.entity";
+import { Teacher } from "../entity/teacher.entity";
+
+import { getAcademicYear } from "../helpers/getAcademicYear";
 
 const auth = express.Router();
 
-auth.post("/auth/login", async (req, res) => {
+auth.post("/login", async (req, res) => {
+  // Import neccesary repos
+  const principalRepo = getRepository(Principal)
+  const teacherRepo = getRepository(Teacher);
+  const userRepo = getRepository(User);
+
   const { email, password } = req.body;
-  const user = await getRepository(User).findOne({
+  const user = await userRepo.findOne({
     where: { email },
   });
+
   if (!user || !user.comparePassword(password)) {
-    throw new Error("Incorrect Email or Password");
+    res.status(401).send({ message: 'Invalid credentials' });
+    return;
   }
+
   const payload = {
     id: user.id,
     email: user.email,
     role: user.role,
+    schoolId: ''
   };
+
+  if (user.role === 'teacher') {
+    // Find the current posting of the teacher
+    const teacher = await teacherRepo.findOne({ where: { user }, relations: ['postings'] })
+    const currentAcademicYear = getAcademicYear()
+    payload.schoolId = teacher.postings.filter(posting => posting.year === currentAcademicYear)[0].school.id
+
+  } else if (user.role === 'principal') {
+    // Find the current posting of the principal
+    const principal = await principalRepo.findOne({ where: { user }, relations: ['school'] })
+    console.log(principal)
+    payload.schoolId = principal.school.id
+  }
+
   const token = jwt.sign(payload, process.env.SECRET_KEY);
 
-  return { email: user.email, role: user.role, token };
+  res.status(200).send({ email: user.email, password: user.password, role: user.role, token });
 });
 
 export default auth;
