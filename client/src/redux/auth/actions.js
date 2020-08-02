@@ -66,43 +66,61 @@ export const whoami = () => {
 
 export const getDbEntities = (user) => {
   return async (dispatch) => {
-    await axiosInstance.get("/user").then(async (res) => {
-      const { users } = res.data;
-      await typeorm.getRepository("user").save(users);
-    });
-    await axiosInstance.get("/common/subjects").then(async (res) => {
-      const { subjects } = res.data;
-      await typeorm.getRepository("subject").save(subjects);
-    });
-    await axiosInstance.get("/common/grades").then(async (res) => {
-      const { grades } = res.data;
-      await typeorm.getRepository("grade").save(grades);
-    });
-    await axiosInstance.get("/common/location").then(async (res) => {
-      const { locations } = res.data;
-      await typeorm.getRepository("location").save(locations);
-    });
-    await axiosInstance.get("/school").then(async (res) => {
-      const { schools } = res.data;
-      await typeorm.getRepository("school").save(schools);
-    });
-    await axiosInstance.get("/teacher").then(async (res) => {
-      const { postings } = res.data;
-      await typeorm.getRepository("posting").save(postings);
-    });
-    await axiosInstance.get("/student").then(async (res) => {
-      const { academics } = res.data;
-      await typeorm.getRepository("academic").save(academics);
-    });
-    await axiosInstance.get("/exam").then(async (res) => {
-      const { exams } = res.data;
-      await typeorm.getRepository("exam").save(exams);
-    });
-    await axiosInstance.get("/result").then(async (res) => {
-      const { results } = res.data;
-      await typeorm.getRepository("result").save(results);
-    });
-    dispatch(dbPopulated());
+    try {
+      await axiosInstance.get("/user").then(async (res) => {
+        const { users } = res.data;
+        await typeorm.getRepository("user").save(users);
+        console.log("Populated user")
+      });
+      await axiosInstance.get("/common/grades").then(async (res) => {
+        const { grades } = res.data;
+        await typeorm.getRepository("grade").save(grades);
+        console.log("Populated grade")
+      });
+      await axiosInstance.get("/common/subjects").then(async (res) => {
+        const { subjects } = res.data;
+        await typeorm.getRepository("subject").save(subjects);
+        console.log("Populated subject")
+      });
+      await axiosInstance.get("/common/location").then(async (res) => {
+        const { locations } = res.data;
+        await typeorm.getRepository("location").save(locations);
+        console.log("Populated location")
+      });
+      await axiosInstance.get("/school").then(async (res) => {
+        const { schools } = res.data;
+        await typeorm.getRepository("school").save(schools);
+        console.log("Populated school")
+      });
+      await axiosInstance.get("/teacher").then(async (res) => {
+        const { postings } = res.data;
+        await typeorm.getRepository("posting").save(postings);
+        console.log("Populated posting")
+      });
+      await axiosInstance.get("/student").then(async (res) => {
+        const { academics } = res.data;
+        await typeorm.getRepository("academic").save(academics);
+        console.log("Populated academic")
+      });
+      await axiosInstance.get("/exam").then(async (res) => {
+        const { exams } = res.data;
+        await typeorm.getRepository("exam").save(exams);
+        console.log("Populated exam")
+      });
+      await axiosInstance.get("/result").then(async (res) => {
+        const { results } = res.data;
+        await typeorm.getRepository("result").save(results);
+        console.log("Populated result")
+      });
+      console.log("DB ALL DONE")
+      // new Notification('Database Populated', {
+      //   body: 'Your application is now ready to work offline'
+      // })
+      dispatch(dbPopulated());
+    }
+    catch (err) {
+      console.error("Something messed up while populating entites", err)
+    }
   };
 };
 
@@ -116,7 +134,7 @@ export const loginAction = (body) => {
           localStorage.setItem("token", res.data.token);
           console.log(res.data);
           dispatch(loginUser(res.data));
-          // dispatch(getDbEntities(res.data.user));
+          dispatch(getDbEntities(res.data.user));
         }
       })
       .catch((err) => {

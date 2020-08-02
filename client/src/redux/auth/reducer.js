@@ -27,7 +27,7 @@ const authReducer = (state = initialState, action) => {
     case LOGOUT_USER:
       return { ...state, currentUser: null };
     case DB_POPULATED:
-      return { ...state, currentUser: null, isDbPopulated: true };
+      return { ...state, isDbPopulated: true };
     default:
       return state;
   }

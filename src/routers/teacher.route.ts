@@ -13,11 +13,6 @@ import { createUser } from "../helpers/createUser";
 const teacher = express.Router();
 teacher.use(bodyParser.json());
 
-teacher.use((req, res, next) => {
-  if (req.user.role === "teacher") res.sendStatus(401);
-  else next();
-});
-
 teacher.get("/", async (req, res) => {
   const user = req.user;
   const schoolRepo = getRepository(School);
@@ -35,6 +30,11 @@ teacher.get("/", async (req, res) => {
     // const teachers = postings.map((posting) => posting.teacher);
     res.send({ postings });
   }
+});
+
+teacher.use((req, res, next) => {
+  if (req.user.role === "teacher") res.sendStatus(401);
+  else next();
 });
 
 teacher.post("/", async (req, res) => {

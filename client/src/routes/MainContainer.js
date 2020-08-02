@@ -11,6 +11,7 @@ const mapStateToProps = (state) => {
     return {
         currentUser: state.auth.currentUser,
         isInitializing: state.auth.isInitializing,
+        isDbPopulated: state.auth.isDbPopulated,
     }
 }
 

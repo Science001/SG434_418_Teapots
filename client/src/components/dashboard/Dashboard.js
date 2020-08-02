@@ -15,6 +15,9 @@ import {
   toggleCreateSchool,
 } from "../../redux/dataEntry/actions";
 
+const electron = window.require("electron");
+const ipcRenderer = electron.ipcRenderer;
+
 const mapStateToProps = (state) => {
   return {
     role: state.auth.currentUser.role,
@@ -31,6 +34,17 @@ const Dashboard = ({
   isCreateSchoolModalOpen,
 }) => {
   const dispatch = useDispatch();
+
+  const onFabClick = () => {
+    role === "directorate"
+      ? dispatch(toggleCreateSchool(true))
+      : role === "principal"
+        ? dispatch(toggleCreateStaff(true))
+        : dispatch(toggleCreateStudent(true))
+  }
+
+  ipcRenderer.on('new-entity', onFabClick);
+
   return (
     <>
       {role === "directorate" && <DirectorateView />}
@@ -44,13 +58,7 @@ const Dashboard = ({
           position: "fixed",
           margin: "0 3em 3em",
         }}
-        onClick={() =>
-          role === "directorate"
-            ? dispatch(toggleCreateSchool(true))
-            : role === "principal"
-            ? dispatch(toggleCreateStaff(true))
-            : dispatch(toggleCreateStudent(true))
-        }
+        onClick={onFabClick}
       >
         <AddIcon />
       </Fab>

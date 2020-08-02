@@ -11,10 +11,10 @@ import { Student } from "../entity/student.entity";
 import { Subject } from "../entity/subject.entity";
 import { Teacher } from "../entity/teacher.entity";
 import { User } from "../entity/user.entity";
+import { Outbox } from "../entity/outbox.entity";
 
 const electron = require("electron");
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+const { app, BrowserWindow, Menu, Tray } = electron;
 
 const path = require("path");
 const url = require("url");
@@ -22,9 +22,69 @@ require("dotenv").config();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
+let mainWindow, trayIcon;
+app.defQuit = false
 
-function createWindow() {
+var mainMenuTemplate = [
+  {
+    label: "File",
+    submenu: [
+      {
+        label: 'New Entity',
+        accelerator: process.platform == 'darwin' ? 'Command+N' : 'Ctrl+N',
+        click() {
+          mainWindow.webContents.send('new-entity')
+        }
+      },
+      {
+        label: 'Quit',
+        accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+        click() {
+          app.defQuit = true;
+          app.quit()
+        }
+      }
+    ]
+  },
+  {
+    label: 'DevTools',
+    submenu: [
+      {
+        label: 'Toggle DevTools',
+        accelerator: process.platform == 'darwin' ? 'Command+I' : "Ctrl+Shift+I",
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools()
+        }
+      },
+      {
+        role: 'reload'
+      }
+    ]
+  }
+]
+var trayMenuTemplate = [
+  {
+    label: "Restore",
+    click() {
+      mainWindow.show()
+    }
+  },
+  {
+    label: 'Quit',
+    click() {
+      app.defQuit = true
+      app.quit()
+    }
+  }
+]
+
+// Build menu from template
+const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
+// Insert the menu
+Menu.setApplicationMenu(mainMenu)
+
+function createMainWindow() {
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1024,
@@ -53,8 +113,9 @@ function createWindow() {
       Subject,
       Teacher,
       User,
+      Outbox,
     ],
-  }).then(async (connection) => {
+  }).then(async (_connection) => {
     console.log("Connection established to SQLite");
   });
 
@@ -62,25 +123,35 @@ function createWindow() {
   const startUrl =
     process.env.ELECTRON_START_URL ||
     url.format({
-      pathname: path.join(__dirname, "/../build/index.html"),
+      pathname: path.join(__dirname, "/../../build/index.html"),
       protocol: "file:",
       slashes: true,
     });
   mainWindow.loadURL(startUrl);
 
-  // Emitted when the window is closed.
-  mainWindow.on("closed", function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null;
-  });
+  // Quit app when close
+  mainWindow.on('close', (e) => {
+    if (!app.defQuit) {
+      e.preventDefault()
+      mainWindow.hide()
+    }
+    else {
+      app.quit()
+    }
+  })
+
+
+  //Tray
+  trayIcon = new Tray(path.join(__dirname, "./logo.png"))
+  const trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
+  trayIcon.setContextMenu(trayMenu)
+  trayIcon.setToolTip("Education Dashboard")
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", createMainWindow);
 
 // Quit when all windows are closed.
 app.on("window-all-closed", function () {
@@ -95,7 +166,7 @@ app.on("activate", function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    createWindow();
+    createMainWindow();
   }
 });
 

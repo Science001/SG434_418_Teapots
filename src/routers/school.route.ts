@@ -11,12 +11,6 @@ import { createUser } from "../helpers/createUser";
 const school = express.Router();
 school.use(bodyParser.json());
 
-school.use((req, res, next) => {
-  if (req.user.role !== "directorate") {
-    res.sendStatus(401);
-  } else next();
-});
-
 school.get("/", async (req, res) => {
   try {
     // Import neccesary repos
@@ -48,6 +42,12 @@ school.get("/:id", async (req, res) => {
     console.error("Error getting school", err);
     res.status(500).send({ message: "Error getting school" });
   }
+});
+
+school.use((req, res, next) => {
+  if (req.user.role !== "directorate") {
+    res.sendStatus(401);
+  } else next();
 });
 
 school.post("/", async (req, res) => {
