@@ -1,9 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add'
+import { connect, useDispatch } from 'react-redux'
 
 import DirectorateView from './DirectorateView';
 import PrincipalView from './PrincipalView';
 import TeacherView from './TeacherView';
+// import { toggleCreateStudent, toggleCreateStaff, toggleCreateSchool } from '../../redux/dataEntry/reducer'
 
 const mapStateToProps = (state) => {
   return {
@@ -12,9 +15,30 @@ const mapStateToProps = (state) => {
 }
 
 const Dashboard = ({ role }) => {
-  if (role === 'directorate') return <DirectorateView />
-  else if (role === 'principal') return <PrincipalView />
-  else return <TeacherView />
+  const dispatch = useDispatch()
+  return <>
+    {role === 'directorate' && <DirectorateView />}
+    {role === 'principal' && <PrincipalView />}
+    {role === 'teacher' && <TeacherView />}
+    {/* <Fab
+      color="primary"
+      style={{
+        bottom: 0,
+        right: 0,
+        position: 'fixed',
+        margin: '0 3em 3em',
+      }}
+      onClick={() =>
+        role === 'directorate' ?
+          dispatch(toggleCreateSchool(true)) :
+          role === 'principal' ?
+            dispatch(toggleCreateStaff(true)) :
+            dispatch(toggleCreateStudent(true))
+      }
+    >
+      <AddIcon />
+    </Fab>*/}
+  </>
 }
 
 export default connect(mapStateToProps)(Dashboard);

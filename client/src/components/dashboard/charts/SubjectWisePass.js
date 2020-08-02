@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { PieChart, Cell, Pie, Sector } from 'recharts';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import IconButton from '@material-ui/core/IconButton';
+
+import { setSubjectSelected } from '../../../redux/report/actions'
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -50,30 +58,45 @@ const SubjectWisePass = ({ data, subject }) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const COLORS = ['#00C49F', '#ff0000c9', '#FFBB28'];
 
+  const dispatch = useDispatch();
+
   return (
     <>
       <div style={{ textAlign: 'center' }}>{subject}</div>
-      <PieChart width={600} height={300}>
-        <Pie
-          activeIndex={activeIndex}
-          activeShape={renderActiveShape}
-          data={data}
-          cx={300}
-          cy={200}
-          innerRadius={60}
-          outerRadius={80}
-          fill="#8884d8"
-          paddingAngle={5}
-          dataKey="value"
-          onMouseEnter={(data, index) => {
-            setActiveIndex(index)
-          }}
-        >
-          {
-            data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
-          }
-        </Pie>
-      </PieChart>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton onClick={() => dispatch(setSubjectSelected(null))}><ChevronLeftIcon /></IconButton>
+          <Typography variant="h6" className={{
+            flexGrow: 1,
+          }}>
+            {subject}
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <PieChart width={450} height={300} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <Pie
+            activeIndex={activeIndex}
+            activeShape={renderActiveShape}
+            data={data}
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            paddingAngle={5}
+            dataKey="value"
+            onMouseEnter={(data, index) => {
+              setActiveIndex(index)
+            }}
+          >
+            {
+              data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
+            }
+          </Pie>
+        </PieChart>
+        <div style={{ flexGrow: 1 }}>
+          {'Highest Mark'}
+        </div>
+      </div>
     </>
   );
 }

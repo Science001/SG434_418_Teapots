@@ -20,21 +20,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Tooltip } from '@material-ui/core';
-import Dashboard from '../components/dashboard/Dashboard';
-import { logoutAction } from '../redux/auth/actions';
-// import { createMuiTheme } from '@material-ui/core/styles';
 
-// const defaultTheme = createMuiTheme();
-// const theme = createMuiTheme({
-//   overrides: {
-//     MuiTooltip: {
-//       tooltip: {
-//         fontSize: "1em",
-//         color: "yellow",
-//       }
-//     }
-//   }
-// });
+import { logoutAction } from '../redux/auth/actions';
+import Dashboard from '../components/dashboard/Dashboard';
+import MenuContainer from '../components/dataEntry/MenuContainer';
 
 const drawerWidth = 240;
 
@@ -102,10 +91,11 @@ const useStyles = makeStyles((theme) => ({
 const mapStateToProps = (state) => {
   return {
     lastUpdatedTime: state.report.lastUpdatedTime,
+    role: state.auth.currentUser.role,
   }
 }
 
-const Sidebar = ({ lastUpdatedTime }) => {
+const Sidebar = ({ lastUpdatedTime, role }) => {
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -171,12 +161,12 @@ const Sidebar = ({ lastUpdatedTime }) => {
             </Tooltip>
             <ListItemText style={{ color: active === 0 ? '#5469d4' : '' }} title="Dashboard" primary={'Dashboard'} />
           </ListItem>
-          <ListItem button key={1} style={{ fontSize: '1.2em' }} onClick={() => setActive(1)}>
+          {role === 'teacher' && <ListItem button key={1} style={{ fontSize: '1.2em' }} onClick={() => setActive(1)}>
             <Tooltip title='Data Entry'>
               <ListItemIcon style={{ color: active === 1 ? '#5469d4' : '' }}><AddToQueueIcon style={{ fontSize: '1.85em' }} /></ListItemIcon>
             </Tooltip>
             <ListItemText style={{ color: active === 1 ? '#5469d4' : '' }} title='Data Entry' primary={'Data Entry'} />
-          </ListItem>
+          </ListItem>}
         </List>
         <List style={{
           bottom: '0',
@@ -193,7 +183,7 @@ const Sidebar = ({ lastUpdatedTime }) => {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {active === 0 ? <Dashboard /> : <></>}
+        {active === 0 ? <Dashboard /> : <MenuContainer />}
       </main>
     </div >
   );

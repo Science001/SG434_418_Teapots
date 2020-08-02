@@ -19,9 +19,9 @@ const SubjectWiseDist = ({ subjectSelected, subjectWisePass }) => {
   const dispatch = useDispatch();
   return (
     <>
-      {subjectSelected !== null &&
+      {/* {subjectSelected !== null &&
         <IconButton onClick={() => dispatch(setSubjectSelected(null))}><ChevronLeftIcon /></IconButton>
-      }
+      } */}
       <div>
         {subjectSelected === null ? <SubjectWiseDistribution /> : <SubjectWisePass data={subjectWisePass} subject={subjectSelected} />}
       </div>

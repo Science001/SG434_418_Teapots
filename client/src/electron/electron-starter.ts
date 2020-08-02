@@ -1,4 +1,16 @@
 import { createConnection } from "typeorm";
+import { Academic } from "../entity/academic.entity";
+import { Exam } from "../entity/exam.entity";
+import { Grade } from "../entity/grade.entity";
+import { Location } from "../entity/location.entity";
+import { Posting } from "../entity/posting.entity";
+import { Principal } from "../entity/principal.entity";
+import { Result } from "../entity/result.entity";
+import { School } from "../entity/school.entity";
+import { Student } from "../entity/student.entity";
+import { Subject } from "../entity/subject.entity";
+import { Teacher } from "../entity/teacher.entity";
+import { User } from "../entity/user.entity";
 
 const electron = require('electron');
 const app = electron.app;
@@ -17,31 +29,39 @@ function createWindow() {
     mainWindow = new BrowserWindow({ width: 1024, height: 800 });
     mainWindow.maximize();
 
-    createConnection().then(async connection => {
+    createConnection({
+        "type": "sqlite",
+        "synchronize": true,
+        "logging": false,
+        "database": `database.sqlite`,
+        "entities": [
+            Academic, Exam, Grade, Location, Posting, Principal, Result, School, Student, Subject, Teacher, User,
+        ]
+    }).then(async connection => {
         console.log("Connection established to SQLite")
-        const academic = await connection.getRepository("academic").find();
+        const academic = await connection.getRepository(Academic).find();
         console.log("academic:", academic)
-        const exam = await connection.getRepository("exam").find();
+        const exam = await connection.getRepository(Exam).find();
         console.log("exam:", exam)
-        const grade = await connection.getRepository("grade").find();
+        const grade = await connection.getRepository(Grade).find();
         console.log("grade:", grade)
-        const location = await connection.getRepository("location").find();
+        const location = await connection.getRepository(Location).find();
         console.log("location:", location)
-        const posting = await connection.getRepository("posting").find();
+        const posting = await connection.getRepository(Posting).find();
         console.log("posting:", posting)
-        const principal = await connection.getRepository("principal").find();
+        const principal = await connection.getRepository(Principal).find();
         console.log("principal:", principal)
-        const result = await connection.getRepository("result").find();
+        const result = await connection.getRepository(Result).find();
         console.log("result:", result)
-        const school = await connection.getRepository("school").find();
+        const school = await connection.getRepository(School).find();
         console.log("school:", school)
-        const student = await connection.getRepository("student").find();
+        const student = await connection.getRepository(Student).find();
         console.log("student:", student)
-        const subject = await connection.getRepository("subject").find();
+        const subject = await connection.getRepository(Subject).find();
         console.log("subject:", subject)
-        const teacher = await connection.getRepository("teacher").find();
+        const teacher = await connection.getRepository(Teacher).find();
         console.log("teacher:", teacher)
-        const user = await connection.getRepository("user").find();
+        const user = await connection.getRepository(User).find();
         console.log("user:", user)
     });
 
