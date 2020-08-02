@@ -1,3 +1,6 @@
+export const SET_SUBJECT_SELECTED = 'SET_SUBJECT_SELECTED'
+export const SET_STUDENTS = 'SET_STUDENTS'
+
 const initialState = {
   students: [
     {
@@ -209,18 +212,18 @@ const initialState = {
   },],
   lastUpdatedTime: null,
   subjectWise: [
-    { name: "English", Highest: 91, Lowest: 21, Average: 3 },
-    { name: "Maths", Highest: 53, Lowest: 22, Average: 21 },
-    { name: "Hindi", Highest: 91, Lowest: 72, Average: 33 },
-    { name: "Social", Highest: 71, Lowest: 42, Average: 33 },
+    { name: "English", Highest: 91, Lowest: 21, Average: 57 },
+    { name: "Maths", Highest: 53, Lowest: 22, Average: 37 },
+    { name: "Hindi", Highest: 91, Lowest: 72, Average: 88 },
+    { name: "Social", Highest: 71, Lowest: 42, Average: 52 },
     { name: "Science", Highest: 81, Lowest: 4, Average: 23 },
   ],
   examWise: [
-    { name: 'Quarterly', Average: 4000 },
-    { name: 'Internal I', Average: 2780 },
-    { name: 'Half Yearly', Average: 3000 },
-    { name: 'Internal II', Average: 1890 },
-    { name: 'Annual', Average: 2000 },
+    { name: 'Quarterly', Average: 345 },
+    { name: 'Internal I', Average: 380 },
+    { name: 'Half Yearly', Average: 327 },
+    { name: 'Internal II', Average: 403 },
+    { name: 'Annual', Average: 420 },
   ],
   studentSubjectPerformance: [
     { subject: 'English', A: 79, fullMark: 150 },
@@ -229,15 +232,32 @@ const initialState = {
     { subject: 'Science', A: 79, fullMark: 150 },
     { subject: 'Social', A: 85, fullMark: 150 },
   ],
+  examImprovement: [
+    { name: 'Quarterly', Average: 4000 },
+    { name: 'Internal I', Average: 2780 },
+    { name: 'Half Yearly', Average: 3000 },
+    { name: 'Internal II', Average: 1890 },
+    { name: 'Annual', Average: 2000 },
+  ],
+  subjectWisePass: [
+    { name: 'Pass', value: 70 },
+    { name: 'Fail', value: 25 },
+    { name: 'Absentees', value: 5 },
+  ],
   currentGrade: 5,
   currentSchool: '',
-
+  subjectSelected: null,
 };
 
 const reportReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'SET_STUDENTS':
+    case SET_STUDENTS:
       return state
+    case SET_SUBJECT_SELECTED:
+      return {
+        ...state,
+        subjectSelected: action.payload
+      }
     default: return state
   }
 }

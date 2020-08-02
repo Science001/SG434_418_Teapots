@@ -10,16 +10,16 @@ import ExamWiseDist from './charts/ExamWiseDist';
 const mapStateToProps = (state) => {
   return {
     students: state.report.students,
-    currentGrade: state.report.currentGrade,
+    currentUser: state.auth.currentUser,
   }
 }
 
-const TeacherView = ({ currentGrade, students }) => {
+const TeacherView = ({ currentUser, students }) => {
   return (
     <div className='container'>
       <div className='title-bar'>
         <div id="class">
-          <h4 style={{ margin: '0', paddingRight: '.5em', fontWeight: '600' }}>{'Class:'}</h4>{currentGrade}
+          <h4 style={{ margin: '0', paddingRight: '.5em', fontWeight: '600' }}>{'Class:'}</h4>{currentUser.grade}
         </div>
         <div id="strength">
           <h4 style={{ margin: '0', paddingRight: '.5em', fontWeight: '600' }}>{'Number of Students:'}</h4>{students.length}

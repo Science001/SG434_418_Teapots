@@ -42,11 +42,11 @@ const stableSort = (array, comparator) => {
 const headCells = [
   { id: 'no', numeric: true, disablePadding: true, label: 'Roll No' },
   { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-  { id: 'sub1', numeric: true, disablePadding: false, label: 'Subject 1' },
-  { id: 'sub2', numeric: true, disablePadding: false, label: 'Subject 2' },
-  { id: 'sub3', numeric: true, disablePadding: false, label: 'Subject 3' },
-  { id: 'sub4', numeric: true, disablePadding: false, label: 'Subject 4' },
-  { id: 'sub5', numeric: true, disablePadding: false, label: 'Subject 5' },
+  { id: 'sub1', numeric: true, disablePadding: false, label: 'English' },
+  { id: 'sub2', numeric: true, disablePadding: false, label: 'Maths' },
+  { id: 'sub3', numeric: true, disablePadding: false, label: 'Hindi' },
+  { id: 'sub4', numeric: true, disablePadding: false, label: 'Social' },
+  { id: 'sub5', numeric: true, disablePadding: false, label: 'Science' },
   { id: 'avg', numeric: true, disablePadding: false, label: 'Average' },
 ];
 
@@ -85,7 +85,6 @@ const ListTableHead = ({ order, orderBy, onRequestSort }) => {
 }
 
 ListTableHead.propTypes = {
-  classes: PropTypes.object.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,

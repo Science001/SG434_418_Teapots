@@ -1,17 +1,16 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
+import { connect } from 'react-redux';
 
-const data = [
-  { name: 'Quarterly', Average: 4000 },
-  { name: 'Internal I', Average: 2780 },
-  { name: 'Half Yearly', Average: 3000 },
-  { name: 'Internal II', Average: 1890 },
-  { name: 'Annual', Average: 2000 },
-];
+const mapStateToProps = (state) => {
+  return {
+    examImprovement: state.report.examImprovement
+  }
+}
 
-const ExamImprovement = ({ }) => {
+const ExamImprovement = ({ examImprovement }) => {
   return (
-    <LineChart width={600} height={300} data={data} style={{ marginTop: '9em' }}
+    <LineChart width={600} height={300} data={examImprovement} style={{ marginTop: '9em' }}
       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
       <XAxis dataKey="name" />
       <YAxis />
@@ -23,4 +22,4 @@ const ExamImprovement = ({ }) => {
   );
 }
 
-export default ExamImprovement;
+export default connect(mapStateToProps)(ExamImprovement);

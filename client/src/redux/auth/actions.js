@@ -33,7 +33,7 @@ export const whoami = () => {
       axiosInstance
         .get(`/user/me`)
         .then(res => {
-          dispatch(loginUser(res.data));
+          dispatch(loginUser(res.data.user));
         })
         .catch(err => {
           if (err.response) {

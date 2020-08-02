@@ -1,4 +1,10 @@
 
+/client/src/electron/*.js
+/client/src/entity/*.js
+/client/src/electron/*.js.map
+/client/src/entity/*.js.map
+*.sqlite
+
 ### Linux ###
 *~
 

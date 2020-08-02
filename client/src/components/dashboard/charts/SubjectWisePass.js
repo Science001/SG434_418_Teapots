@@ -1,10 +1,7 @@
-import React from 'react'
-import { PieChart, Pie, Sector } from 'recharts';
+import React, { useState } from 'react'
+import { PieChart, Cell, Pie, Sector } from 'recharts';
 
-const data = [{ name: 'Group A', value: 400 }, { name: 'Group B', value: 300 },
-{ name: 'Group C', value: 300 }, { name: 'Group D', value: 200 }];
-
-const SubjectWisePass = (props) => {
+const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
   const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
     fill, payload, percent, value } = props;
@@ -49,23 +46,16 @@ const SubjectWisePass = (props) => {
   );
 };
 
-const TwoLevelPieChart = React.createClass({
-  getInitialState() {
-    return {
-      activeIndex: 0,
-    };
-  },
+const SubjectWisePass = ({ data, subject }) => {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const COLORS = ['#00C49F', '#ff0000c9', '#FFBB28'];
 
-  onPieEnter(data, index) {
-    this.setState({
-      activeIndex: index,
-    });
-  },
-  render() {
-    return (
-      <PieChart width={800} height={400}>
+  return (
+    <>
+      <div style={{ textAlign: 'center' }}>{subject}</div>
+      <PieChart width={600} height={300}>
         <Pie
-          activeIndex={this.state.activeIndex}
+          activeIndex={activeIndex}
           activeShape={renderActiveShape}
           data={data}
           cx={300}
@@ -73,10 +63,18 @@ const TwoLevelPieChart = React.createClass({
           innerRadius={60}
           outerRadius={80}
           fill="#8884d8"
-          onMouseEnter={this.onPieEnter}
-        />
+          paddingAngle={5}
+          dataKey="value"
+          onMouseEnter={(data, index) => {
+            setActiveIndex(index)
+          }}
+        >
+          {
+            data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
+          }
+        </Pie>
       </PieChart>
-    );
-  }
-})
+    </>
+  );
+}
 export default SubjectWisePass

@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
 import { IconButton, Slide, AppBar, Toolbar, Grid } from '@material-ui/core';
-import CancelIcon from '@material-ui/icons/Cancel';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import StudentSubjectPerformance from './charts/StudentSubjectPerformance';
 import ExamImprovement from './charts/ExamImprovement';
 
@@ -15,8 +15,13 @@ const StudentModal = ({ isOpen, closeModal, student }) => {
     <Dialog fullScreen open={isOpen} onClose={closeModal} TransitionComponent={Transition}>
       <AppBar style={{ position: 'relative' }}>
         <Toolbar style={{ position: 'relative', textAlign: 'center' }}>
-          <IconButton edge="end" color="inherit" onClick={closeModal} aria-label="close">
-            <CancelIcon onClick={() => closeModal()} />
+          <IconButton edge="start" color="inherit"
+            onClick={() => {
+              console.log('Close Button');
+              closeModal()
+            }}
+            aria-label="close">
+            <CloseRoundedIcon />
           </IconButton>
           <span style={{ flexGrow: 1 }}><strong style={{ marginRight: '1em' }}>{'Student'}</strong>{student.name.toUpperCase()}</span>
         </Toolbar>

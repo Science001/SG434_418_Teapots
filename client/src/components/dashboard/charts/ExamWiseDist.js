@@ -14,7 +14,7 @@ const ExamWiseDist = ({ examWise }) => {
       margin={{ top: 10, right: 30, left: 0, bottom: 0 }} >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="name" />
-      <YAxis />
+      <YAxis label={{ value: 'Total Average', angle: -90, position: 'insideLeft' }} domain={[0, 500]} />
       <Tooltip />
       <Area type='monotone' dataKey='Average' stroke='#8884d8' fill='#8884d8' />
     </AreaChart>
