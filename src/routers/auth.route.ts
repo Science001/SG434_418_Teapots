@@ -12,7 +12,7 @@ const auth = express.Router();
 
 auth.post("/login", async (req, res) => {
   // Import neccesary repos
-  const principalRepo = getRepository(Principal)
+  const principalRepo = getRepository(Principal);
   const teacherRepo = getRepository(Teacher);
   const userRepo = getRepository(User);
 
@@ -22,7 +22,7 @@ auth.post("/login", async (req, res) => {
   });
 
   if (!user || !user.comparePassword(password)) {
-    res.status(401).send({ message: 'Invalid credentials' });
+    res.status(401).send({ message: "Invalid credentials" });
     return;
   }
 
@@ -30,25 +30,41 @@ auth.post("/login", async (req, res) => {
     id: user.id,
     email: user.email,
     role: user.role,
-    schoolId: ''
+    schoolId: "",
+    grade: -1,
   };
 
-  if (user.role === 'teacher') {
+  if (user.role === "teacher") {
     // Find the current posting of the teacher
-    const teacher = await teacherRepo.findOne({ where: { user }, relations: ['postings'] })
-    const currentAcademicYear = getAcademicYear()
-    payload.schoolId = teacher.postings.filter(posting => posting.year === currentAcademicYear)[0].school.id
-
-  } else if (user.role === 'principal') {
+    const teacher = await teacherRepo.findOne({
+      where: { user },
+      relations: ["postings"],
+    });
+    const currentAcademicYear = getAcademicYear();
+    const currentPosting = teacher.postings.filter(
+      (posting) => posting.year === currentAcademicYear
+    );
+    payload.schoolId = currentPosting[0].school.id;
+    payload.grade = currentPosting[0].grade.value;
+  } else if (user.role === "principal") {
     // Find the current posting of the principal
-    const principal = await principalRepo.findOne({ where: { user }, relations: ['school'] })
-    console.log(principal)
-    payload.schoolId = principal.school.id
+    const principal = await principalRepo.findOne({
+      where: { user },
+      relations: ["school"],
+    });
+    console.log(principal);
+    payload.schoolId = principal.school.id;
   }
 
   const token = jwt.sign(payload, process.env.SECRET_KEY);
 
-  res.status(200).send({ email: user.email, password: user.password, role: user.role, token });
+  res.status(200).send({
+    email: user.email,
+    password: user.password,
+    role: user.role,
+    grade: payload.grade,
+    token,
+  });
 });
 
 export default auth;

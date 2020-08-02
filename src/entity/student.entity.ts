@@ -19,9 +19,6 @@ export class Student {
   @Column("varchar", { length: 50 })
   name: string;
 
-  @Column("varchar", { length: 5, nullable: true })
-  section: string;
-
   @Column("varchar", { length: 10 })
   gender: Gender;
 
@@ -30,9 +27,6 @@ export class Student {
 
   @OneToMany(() => Academic, (academic) => academic.student)
   academics: Academic[];
-
-  @OneToMany(() => Result, (result) => result.student)
-  results: Result[];
 
   @CreateDateColumn()
   insertedOn: Date;

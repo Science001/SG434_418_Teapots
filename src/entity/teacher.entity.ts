@@ -24,13 +24,10 @@ export class Teacher {
   @Column("text")
   name: string;
 
-  @Column("varchar", { length: 5, nullable: true })
-  section: string;
-
   @Column({ default: false })
   hasResigned: boolean;
 
-  @OneToMany(() => Posting, (posting) => posting.teacher, { cascade: true })
+  @OneToMany(() => Posting, (posting) => posting.teacher)
   postings: Posting[];
 
   @OneToMany(() => Result, (result) => result.insertedBy)

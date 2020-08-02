@@ -5,6 +5,7 @@ declare namespace Express {
       email: string;
       role: string;
       schoolId?: string;
+      grade?: number;
     };
   }
 }

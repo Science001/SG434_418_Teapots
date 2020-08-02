@@ -1,44 +1,41 @@
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    ManyToMany,
-    OneToOne,
-    JoinColumn,
-    OneToMany,
-    ManyToOne,
-    CreateDateColumn,
-    Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
+  ManyToOne,
+  CreateDateColumn,
+  Column,
 } from "typeorm";
 import { Student } from "./student.entity";
 import { Subject } from "./subject.entity";
 import { Exam } from "./exam.entity";
 import { Grade } from "./grade.entity";
 import { Teacher } from "./teacher.entity";
+import { Academic } from "./academic.entity";
 
 @Entity()
 export class Result {
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-    @Column("float")
-    marks: number;
+  @Column("float")
+  mark: number;
 
-    @ManyToOne(() => Exam, exam => exam.results)
-    exam: Exam;
+  @ManyToOne(() => Exam, (exam) => exam.results, { eager: true })
+  exam: Exam;
 
-    @ManyToOne(() => Student, (student) => student.results)
-    student: Student;
+  @ManyToOne(() => Academic, (academic) => academic.results, { eager: true })
+  academic: Academic;
 
-    @ManyToOne(() => Subject, (subject) => subject.results)
-    subject: Subject;
+  @ManyToOne(() => Subject, (subject) => subject.results, { eager: true })
+  subject: Subject;
 
-    @ManyToOne(() => Grade, grade => grade.results)
-    grade: Grade;
+  @ManyToOne(() => Teacher, (teacher) => teacher.resultEntries)
+  insertedBy: Teacher;
 
-    @ManyToOne(() => Teacher, teacher => teacher.resultEntries)
-    insertedBy: Teacher;
-
-    @CreateDateColumn()
-    insertedOn: Date;
-
+  @CreateDateColumn()
+  insertedOn: Date;
 }

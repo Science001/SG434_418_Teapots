@@ -10,7 +10,7 @@ user.get("/", async (_req, res) => {
 });
 
 user.get("/me", async (req, res) => {
-  if (req.user) res.send({ user });
+  if (req.user) res.send({ user: req.user });
   else res.sendStatus(403);
 });
 
