@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { useDispatch, connect } from 'react-redux'
 
-import './css/AuthContainer.css'
+import './css/authContainer.css'
 import { loginAction } from '../../redux/auth/actions';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -33,7 +33,7 @@ const AuthContainer = ({ isLoginOnProcess, errorMsg }) => {
   }
 
   return (
-    <div className="container">
+    <div id="container">
       <span style={{ fontSize: '2em' }}>{'Government of Sikkim'}</span>
       <Avatar style={{
         width: '5em',

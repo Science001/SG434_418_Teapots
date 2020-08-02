@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch, connect } from 'react-redux'
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -99,7 +99,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Sidebar = () => {
+const mapStateToProps = (state) => {
+  return {
+    lastUpdatedTime: state.report.lastUpdatedTime,
+  }
+}
+
+const Sidebar = ({ lastUpdatedTime }) => {
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -133,6 +139,9 @@ const Sidebar = () => {
           </IconButton>
           <Typography variant="h6" noWrap>
             {'Data Storage and Analytics Dashboard'}
+          </Typography>
+          <Typography>
+            {lastUpdatedTime}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -189,4 +198,4 @@ const Sidebar = () => {
     </div >
   );
 }
-export default Sidebar
+export default connect(mapStateToProps)(Sidebar)

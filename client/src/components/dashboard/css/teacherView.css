@@ -1,0 +1,13 @@
+.title-bar {
+  display: flex;
+  margin-bottom: 2em;
+}
+
+#class {
+  display: flex;
+}
+
+#strength {
+  display: flex;
+  margin-left: auto;
+}

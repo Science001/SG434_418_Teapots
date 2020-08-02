@@ -1,16 +1,20 @@
 import React from 'react';
-import Chart from './Chart';
-import CompareChart from './CompareChart';
-import CompareAnotherChart from './CompareAnotherChart';
+import { connect } from 'react-redux'
 
-const Dashboard = () => {
-  return (
-    <div style={{ display: 'flex' }}>
-      <Chart />
-      <CompareChart />
-      <CompareAnotherChart />
-    </div>
-  );
+import DirectorateView from './DirectorateView';
+import PrincipalView from './PrincipalView';
+import TeacherView from './TeacherView';
+
+const mapStateToProps = (state) => {
+  return {
+    role: state.auth.currentUser.role,
+  }
 }
 
-export default Dashboard;
+const Dashboard = ({ role }) => {
+  if (role === 'directorate') return <DirectorateView />
+  else if (role === 'principal') return <PrincipalView />
+  else return <TeacherView />
+}
+
+export default connect(mapStateToProps)(Dashboard);
