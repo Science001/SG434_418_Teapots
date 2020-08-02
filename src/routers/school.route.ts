@@ -21,8 +21,15 @@ school.get("/", async (req, res) => {
   try {
     // Import neccesary repos
     const schoolRepo = getRepository(School);
-    const schools = await schoolRepo.find();
-    res.send({ schools });
+    if (req.user.role === "directorate") {
+      const schools = await schoolRepo.find();
+      res.send({ schools });
+    } else {
+      const schools = await schoolRepo.findOne({
+        where: { id: req.user.schoolId },
+      });
+      res.send({ schools });
+    }
   } catch (err) {
     console.error("Error getting schools", err);
     res.status(500).send({ message: "Error getting schools" });

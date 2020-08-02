@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Paper from '@material-ui/core/Paper';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Paper from "@material-ui/core/Paper";
 
-import './css/listTable.css'
-import StudentModal from './StudentModal';
+import "./css/listTable.css";
+import StudentModal from "./StudentModal";
 
 const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
@@ -21,13 +21,13 @@ const descendingComparator = (a, b, orderBy) => {
     return 1;
   }
   return 0;
-}
+};
 
 const getComparator = (order, orderBy) => {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
-}
+};
 
 const stableSort = (array, comparator) => {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -37,20 +37,9 @@ const stableSort = (array, comparator) => {
     return a[1] - b[1];
   });
   return stabilizedThis.map((el) => el[0]);
-}
+};
 
-const headCells = [
-  { id: 'no', numeric: true, disablePadding: true, label: 'Roll No' },
-  { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-  { id: 'sub1', numeric: true, disablePadding: false, label: 'English' },
-  { id: 'sub2', numeric: true, disablePadding: false, label: 'Maths' },
-  { id: 'sub3', numeric: true, disablePadding: false, label: 'Hindi' },
-  { id: 'sub4', numeric: true, disablePadding: false, label: 'Social' },
-  { id: 'sub5', numeric: true, disablePadding: false, label: 'Science' },
-  { id: 'avg', numeric: true, disablePadding: false, label: 'Average' },
-];
-
-const ListTableHead = ({ order, orderBy, onRequestSort }) => {
+const ListTableHead = ({ order, orderBy, onRequestSort, dataHead }) => {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -58,22 +47,22 @@ const ListTableHead = ({ order, orderBy, onRequestSort }) => {
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {dataHead.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={'center'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
+            align={"center"}
+            padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
+              direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <span className="visuallyHidden">
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </span>
               ) : null}
             </TableSortLabel>
@@ -82,30 +71,30 @@ const ListTableHead = ({ order, orderBy, onRequestSort }) => {
       </TableRow>
     </TableHead>
   );
-}
+};
 
 ListTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
 
-const ListTable = ({ students }) => {
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('calories');
+const ListTable = ({ data, dataHead }) => {
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("calories");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [modalOpen, setModalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleRequestSort = (_event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
   const handleClick = (_event, row) => {
-    setModalOpen(true)
+    setModalOpen(true);
   };
 
   const handleChangePage = (_event, newPage) => {
@@ -117,26 +106,28 @@ const ListTable = ({ students }) => {
     setPage(0);
   };
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, students.length - page * rowsPerPage);
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
   return (
-    <div className='root'>
-      <Paper className='paper'>
+    <div className="root">
+      <Paper className="paper">
         <TableContainer>
           <Table
-            className='table'
+            className="table"
             aria-labelledby="tableTitle"
-            size={'medium'}
+            size={"medium"}
             aria-label="enhanced table"
           >
             <ListTableHead
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={students.length}
+              rowCount={data.length}
+              dataHead={dataHead}
             />
             <TableBody>
-              {stableSort(students, getComparator(order, orderBy))
+              {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -148,11 +139,15 @@ const ListTable = ({ students }) => {
                       tabIndex={-1}
                       key={row.rollNo}
                     >
-                      <TableCell align="center">
-                        {row.rollNo}
-                      </TableCell>
+                      <TableCell align="center">{row.rollNo}</TableCell>
 
-                      <TableCell align="center" component="th" id={labelId} scope="row" padding="none">
+                      <TableCell
+                        align="center"
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
                         {row.name}
                       </TableCell>
                       <TableCell align="center">{row.sub1}</TableCell>
@@ -161,7 +156,11 @@ const ListTable = ({ students }) => {
                       <TableCell align="center">{row.sub4}</TableCell>
                       <TableCell align="center">{row.sub5}</TableCell>
                       <TableCell align="center">{row.avg}</TableCell>
-                      <StudentModal isOpen={modalOpen} closeModal={() => setModalOpen(false)} student={row} />
+                      <StudentModal
+                        isOpen={modalOpen}
+                        closeModal={() => setModalOpen(false)}
+                        student={row}
+                      />
                     </TableRow>
                   );
                 })}
@@ -176,7 +175,7 @@ const ListTable = ({ students }) => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 20, 50, 100]}
           component="div"
-          count={students.length}
+          count={data.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
@@ -185,6 +184,6 @@ const ListTable = ({ students }) => {
       </Paper>
     </div>
   );
-}
+};
 
-export default ListTable
+export default ListTable;

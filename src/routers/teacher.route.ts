@@ -20,19 +20,17 @@ teacher.use((req, res, next) => {
 
 teacher.get("/", async (req, res) => {
   const user = req.user;
-  const teacherRepo = getRepository(Teacher);
   const schoolRepo = getRepository(School);
   const postingRepo = getRepository(Posting);
   if (user.role === "directorate") {
-    const teachers = await teacherRepo.find();
-    res.send({ teachers });
+    const postings = await postingRepo.find();
+    res.send({ postings });
   } else {
     // const school = await schoolRepo.findOne({
     //   where: { id: req.user.schoolId },
     // });
     const postings = await postingRepo.find({
       where: { school: { id: req.user.schoolId }, year: getAcademicYear() },
-      relations: ["teacher"],
     });
     // const teachers = postings.map((posting) => posting.teacher);
     res.send({ postings });

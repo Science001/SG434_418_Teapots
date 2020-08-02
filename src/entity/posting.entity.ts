@@ -23,7 +23,10 @@ export class Posting {
   @ManyToOne(() => Grade, (grade) => grade.postings, { eager: true })
   grade: Grade;
 
-  @ManyToOne(() => Teacher, (teacher) => teacher.postings, { cascade: true })
+  @ManyToOne(() => Teacher, (teacher) => teacher.postings, {
+    cascade: true,
+    eager: true,
+  })
   teacher: Teacher;
 
   @CreateDateColumn()

@@ -1,32 +1,31 @@
-import React from 'react';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import IconButton from '@material-ui/core/IconButton';
-import { connect, useDispatch } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import SubjectWiseDistribution from './SubjectWiseDistribution'
-import SubjectWisePass from './SubjectWisePass'
-
-import { setSubjectSelected } from '../../../redux/report/actions'
+import SubjectWiseDistribution from "./SubjectWiseDistribution";
+import SubjectWisePass from "./SubjectWisePass";
 
 const mapStateToProps = (state) => {
   return {
     subjectSelected: state.report.subjectSelected,
-    subjectWisePass: state.report.subjectWisePass
-  }
-}
+    subjectWisePass: state.report.subjectWisePass,
+    subjectWise: state.report.subjectWise,
+  };
+};
 
-const SubjectWiseDist = ({ subjectSelected, subjectWisePass }) => {
-  const dispatch = useDispatch();
+const SubjectWiseDist = ({ subjectWise, subjectSelected, subjectWisePass }) => {
   return (
-    <>
-      {/* {subjectSelected !== null &&
-        <IconButton onClick={() => dispatch(setSubjectSelected(null))}><ChevronLeftIcon /></IconButton>
-      } */}
-      <div>
-        {subjectSelected === null ? <SubjectWiseDistribution /> : <SubjectWisePass data={subjectWisePass} subject={subjectSelected} />}
-      </div>
-    </>
+    <div>
+      {subjectSelected === null ? (
+        <SubjectWiseDistribution />
+      ) : (
+        <SubjectWisePass
+          subjectWise={subjectWise.filter((s) => s.name === subjectSelected)}
+          data={subjectWisePass}
+          subject={subjectSelected}
+        />
+      )}
+    </div>
   );
-}
+};
 
-export default connect(mapStateToProps)(SubjectWiseDist)
+export default connect(mapStateToProps)(SubjectWiseDist);
