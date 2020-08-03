@@ -1,6 +1,5 @@
 import React, { forwardRef } from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import Typography from '@material-ui/core/Typography';
 import { IconButton, Slide, AppBar, Toolbar, Grid } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import StudentSubjectPerformance from './charts/StudentSubjectPerformance';

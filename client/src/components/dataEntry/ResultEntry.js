@@ -1,5 +1,5 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
 import {
   Table,
   TableHead,
@@ -7,15 +7,24 @@ import {
   TableCell,
   TableContainer,
   TableBody,
+  TextField,
 } from "@material-ui/core";
+
+import { fetchStudents } from '../../redux/dataEntry/actions'
 
 const mapStateToProps = (state) => {
   return {
     subjects: state.dataEntry.subjects,
+    students: state.dataEntry.students,
   };
 };
 
-const ResultEntry = ({ subjects }) => {
+const ResultEntry = ({ students, subjects }) => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchStudents())
+  }, [dispatch])
+
   return (
     <div>
       <TableContainer>
@@ -29,7 +38,19 @@ const ResultEntry = ({ subjects }) => {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody></TableBody>
+          <TableBody>
+            {students.map((student, idx) =>
+              <TableRow key={idx + 1}>
+                <TableCell>{idx}</TableCell>
+                <TableCell>{student}</TableCell>
+                {subjects.map((subject, idx) => (
+                  <TableCell key={idx}>
+                    <TextField label={subject} />
+                  </TableCell>
+                ))}
+              </TableRow>)
+            }
+          </TableBody>
         </Table>
       </TableContainer>
     </div>

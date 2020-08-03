@@ -4,6 +4,9 @@ import { showToast } from '../toast/actions';
 import {
   TOGGLE_CREATE_STUDENT,
   TOGGLE_CREATE_STAFF,
+  ADD_STUDENTS,
+  CREATE_EXAM,
+  ENTER_RESULTS_PAGE,
   TOGGLE_CREATE_SCHOOL,
 } from "./reducer";
 
@@ -27,6 +30,27 @@ export const toggleCreateSchool = (bool) => {
     payload: bool,
   };
 };
+
+export const createExam = (name) => {
+  return {
+    type: CREATE_EXAM,
+    payload: name
+  }
+}
+
+export const toggleResultsPage = (bool) => {
+  return {
+    type: ENTER_RESULTS_PAGE,
+    payload: bool
+  }
+}
+
+export const addStudents = (students) => {
+  return {
+    type: ADD_STUDENTS,
+    payload: students
+  }
+}
 
 export const createStudent = (body) => {
   return (dispatch) => {
@@ -64,5 +88,12 @@ export const createSchool = (body) => {
       .catch(err => {
         console.log(err)
       })
+  }
+}
+
+export const fetchStudents = () => {
+  return (dispatch) => {
+    const students = []
+    dispatch(addStudents(students))
   }
 }

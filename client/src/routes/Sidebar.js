@@ -23,7 +23,7 @@ import { Tooltip } from "@material-ui/core";
 
 import { logoutAction } from "../redux/auth/actions";
 import Dashboard from "../components/dashboard/Dashboard";
-import ResultEntry from "../components/dataEntry/ResultEntry";
+import MenuContainer from "../components/dataEntry/MenuContainer";
 
 const drawerWidth = 240;
 
@@ -100,7 +100,7 @@ const Sidebar = ({ lastUpdatedTime, role }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(1);
 
   const logOut = () => {
     dispatch(logoutAction());
@@ -151,8 +151,8 @@ const Sidebar = ({ lastUpdatedTime, role }) => {
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
             ) : (
-              <ChevronLeftIcon />
-            )}
+                <ChevronLeftIcon />
+              )}
           </IconButton>
         </div>
         <Divider />
@@ -218,7 +218,7 @@ const Sidebar = ({ lastUpdatedTime, role }) => {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {active === 0 ? <Dashboard /> : <ResultEntry />}
+        {active === 0 ? <Dashboard /> : <MenuContainer />}
       </main>
     </div>
   );

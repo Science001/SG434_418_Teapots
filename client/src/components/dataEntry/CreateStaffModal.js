@@ -18,7 +18,6 @@ const CreateStaffModal = ({ isOpen, handleClose }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [gender, setGender] = useState("");
   const [grade, setGrade] = useState("");
 
   const dispatch = useDispatch()
