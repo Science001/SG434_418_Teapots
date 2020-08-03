@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BarChart,
   Bar,
@@ -7,6 +7,8 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  Cell,
+  LabelList,
 } from "recharts";
 import { connect, useDispatch } from "react-redux";
 
@@ -19,28 +21,61 @@ const mapStateToProps = (state) => {
 };
 
 const GradeWiseDist = ({ gradeWiseDist }) => {
+  const COLORS = ["#77dd77"];
   const dispatch = useDispatch();
+  const [hoverIndex, setHoverIndex] = useState(-1);
   return (
     <BarChart
-      width={1200}
-      height={500}
+      width={800}
+      height={400}
       data={gradeWiseDist}
       style={{
-        marginTop: '1em'
+        marginTop: "1em",
       }}
-      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-      onClick={(data) => dispatch(setGradeSelected(data.activeLabel))}
+      margin={{ top: 15, right: 30, left: 20, bottom: 15 }}
+      onClick={(data) => {
+        if (data) {
+          dispatch(setGradeSelected(data.activeLabel));
+        }
+      }}
     >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="class" />
-      <YAxis />
-      <Tooltip />
-      <Legend
-        payload={[
-          { value: "Grade Strength", type: "square", color: "#8884d8" },
-        ]}
+      {/* <CartesianGrid strokeDasharray="2 2" /> */}
+      <XAxis
+        dataKey="class"
+        label={{
+          value: "Grade",
+          color: "#F25022",
+          position: "bottom",
+        }}
       />
-      <Bar dataKey="Strength" barSize={50} fill="#8884d8" />
+      <YAxis
+        label={{
+          value: "No of Students",
+          angle: -90,
+          position: "left",
+          color: "#F25022",
+        }}
+      />
+
+      <Bar
+        dataKey="Strength"
+        barSize={40}
+        label
+        onMouseOver={(data, index) => {
+          setHoverIndex(index);
+        }}
+        onMouseOut={(data, index) => {
+          setHoverIndex(-1);
+        }}
+      >
+        <LabelList dataKey="Strength" position="top" />
+        {gradeWiseDist.map((entry, index) => (
+          <Cell
+            key={`cell-${index}`}
+            fill={index === hoverIndex ? "#8884d8" : "#77dd77"}
+          />
+        ))}
+      </Bar>
     </BarChart>
   );
 };

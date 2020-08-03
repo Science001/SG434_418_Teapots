@@ -19,11 +19,12 @@ import AddToQueueIcon from "@material-ui/icons/AddToQueue";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { Tooltip } from "@material-ui/core";
+import { Tooltip, Avatar } from "@material-ui/core";
 
 import { logoutAction } from "../redux/auth/actions";
 import Dashboard from "../components/dashboard/Dashboard";
 import MenuContainer from "../components/dataEntry/MenuContainer";
+import { deepOrange } from "@material-ui/core/colors";
 
 const drawerWidth = 240;
 
@@ -91,16 +92,16 @@ const useStyles = makeStyles((theme) => ({
 const mapStateToProps = (state) => {
   return {
     lastUpdatedTime: state.report.lastUpdatedTime,
-    role: state.auth.currentUser.role,
+    currentUser: state.auth.currentUser,
   };
 };
 
-const Sidebar = ({ lastUpdatedTime, role }) => {
+const Sidebar = ({ lastUpdatedTime, currentUser }) => {
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
 
   const logOut = () => {
     dispatch(logoutAction());
@@ -151,12 +152,28 @@ const Sidebar = ({ lastUpdatedTime, role }) => {
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
             ) : (
-                <ChevronLeftIcon />
-              )}
+              <ChevronLeftIcon />
+            )}
           </IconButton>
         </div>
         <Divider />
         <List>
+          <ListItem button key={9} style={{ fontSize: "1.2em" }}>
+            <Tooltip title={currentUser.email.split("@")[0]}>
+              <ListItemIcon>
+                <Avatar
+                  className={classes.orange}
+                  style={{ backgroundColor: deepOrange[500] }}
+                >
+                  {currentUser.email[0].toUpperCase()}
+                </Avatar>
+              </ListItemIcon>
+            </Tooltip>
+            <ListItemText
+              title={currentUser.email.split("@")[0]}
+              primary={currentUser.email.split("@")[0]}
+            />
+          </ListItem>
           <ListItem
             button
             key={0}
@@ -174,7 +191,7 @@ const Sidebar = ({ lastUpdatedTime, role }) => {
               primary={"Dashboard"}
             />
           </ListItem>
-          {role === "teacher" && (
+          {currentUser.role === "teacher" && (
             <ListItem
               button
               key={1}

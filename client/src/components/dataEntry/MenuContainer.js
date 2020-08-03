@@ -1,79 +1,171 @@
-import React, { useState } from 'react';
-import { TextField, Button, Grid, Divider, Typography, ListItem, ListItemText, List } from '@material-ui/core';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { useDispatch, connect } from 'react-redux';
+import React, { useState } from "react";
+import {
+  TextField,
+  Button,
+  Grid,
+  Divider,
+  Typography,
+  ListItem,
+  ListItemText,
+  List,
+} from "@material-ui/core";
+import DraftsIcon from "@material-ui/icons/Drafts";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import FiberManualRecordTwoToneIcon from "@material-ui/icons/FiberManualRecordTwoTone";
+import { useDispatch, connect } from "react-redux";
 
-import { createExam, toggleResultsPage } from '../../redux/dataEntry/actions'
-import ResultEntry from './ResultEntry'
-import './css/menuContainer.css'
+import { createExam, toggleResultsPage } from "../../redux/dataEntry/actions";
+import ResultEntry from "./ResultEntry";
+import "./css/menuContainer.css";
 
 const mapStateToProps = (state) => {
-	return {
-		enterResultsPage: state.dataEntry.enterResultsPage
-	}
-}
+  return {
+    enterResultsPage: state.dataEntry.enterResultsPage,
+  };
+};
 
 const MenuContainer = ({ enterResultsPage }) => {
-	const [examTitle, setExamTitle] = useState('')
-	const dispatch = useDispatch()
+  const [examTitle, setExamTitle] = useState("");
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [exams, setExams] = useState(["Annual Exam"]);
+  const [examName, setExamName] = useState();
+  const [drafts, setDrafts] = useState(["Internal Assessment 2"]);
+  const [outbox, setOutbox] = useState([]);
+  const dispatch = useDispatch();
 
-	if (enterResultsPage) return <ResultEntry />
-	else
-		return (
-			<div>
-				<Grid container>
-					<Grid xs={11}>
-						<TextField
-							fullWidth
-							placeholder='Create New Exam'
-							value={examTitle}
-							onChange={(e) => setExamTitle(e.target.value)}
-						/>
-					</Grid>
-					<Grid xs={1}>
-						<Button
-							color="primary"
-							onClick={() => {
-								dispatch(createExam(examTitle));
-								dispatch(toggleResultsPage(true))
-							}}
-						>
-							{'Create'}
-						</Button>
-					</Grid>
-				</Grid>
+  const pushToOutbox = (exam) => {
+    setExams(exams.filter((x) => x !== exam));
+    setDrafts(drafts.filter((x) => x !== exam));
+    setOutbox([...outbox, exam]);
+  };
 
-				<Divider center style={{ margin: '2em 0' }} />
+  const pushToDrafts = (exam) => {
+    setExams(exams.filter((x) => x !== exam));
+    if (!drafts.includes(exam)) setDrafts([...drafts, exam]);
+  };
 
-				<div style={{ display: 'flex' }}>
-					<Typography style={{ flexGrow: 1 }} variant="h5">{"Drafts"}</Typography>
-					<span style={{ marginRight: '3em' }}><DraftsIcon /></span>
-				</div>
+  window.addEventListener("online", () => setIsOnline(true));
+  window.addEventListener("offline", () => setIsOnline(false));
 
-				<List component="nav" >
-					<ListItem button className="list-item">
-						<ListItemText fullWidth>{'Final Exam'}</ListItemText>
-					</ListItem>
-				</List>
+  if (enterResultsPage)
+    return (
+      <ResultEntry
+        examName={examName}
+        pushToOutbox={pushToOutbox}
+        pushToDrafts={pushToDrafts}
+      />
+    );
+  else
+    return (
+      <div>
+        {exams.length ? (
+          <div id="exams">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                color: "#8884d8",
+              }}
+            >
+              <Typography variant="h6">{"New Exams"}</Typography>
+            </div>
 
-				<Divider center style={{ margin: '2em 0' }} />
+            <List component="nav">
+              {exams.map((exam) => (
+                <ListItem
+                  button
+                  className="list-item"
+                  onClick={() => {
+                    setExamName(exam);
+                    dispatch(toggleResultsPage(true));
+                  }}
+                >
+                  <ListItemText>{exam}</ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        ) : (
+          ""
+        )}
 
-				<div style={{ display: 'flex' }}>
-					<Typography style={{ flexGrow: 1 }} variant="h5">{"Outbox"}</Typography>
-					<span style={{ marginRight: '3em', transform: 'rotate(270deg)' }}><ExitToAppIcon /></span>
-				</div>
+        <Divider style={{ margin: "2em 0" }} />
+        {drafts.length ? (
+          <div id="drafts">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                color: "#8884d8",
+              }}
+            >
+              <DraftsIcon style={{ marginRight: 5 }} />
+              <Typography variant="h6">{"Drafts"}</Typography>
+              <span style={{ marginRight: "3em" }}></span>
+            </div>
+            <List component="nav">
+              {drafts.map((draftName) => (
+                <ListItem
+                  button
+                  className="list-item"
+                  onClick={() => {
+                    setExamName(draftName);
+                    dispatch(toggleResultsPage(true));
+                  }}
+                >
+                  <ListItemText>{draftName}</ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        ) : (
+          ""
+        )}
+        <Divider style={{ margin: "2em 0" }} />
 
-				<List component="nav" >
-					<ListItem button>
-						<ListItemText fullWidth>{'Quarterly Exam'}</ListItemText>
-					</ListItem>
-					<ListItem button>
-						<ListItemText fullWidth>{'Half-Yearly Exam'}</ListItemText>
-					</ListItem>
-				</List>
-			</div>
-		);
-}
+        {outbox.length ? (
+          <div id="outbox">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                color: "#8884d8",
+              }}
+            >
+              <ExitToAppIcon style={{ marginRight: 5 }} />
+              <Typography variant="h6">{"Outbox"}</Typography>
+              <span
+                style={{ marginRight: "3em", transform: "rotate(270deg)" }}
+              ></span>
+            </div>
+
+            <List component="nav">
+              {outbox.map((exam) => (
+                <ListItem button>
+                  <ListItemText>{exam}</ListItemText>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      color: isOnline ? "green" : "grey",
+                    }}
+                  >
+                    <FiberManualRecordTwoToneIcon />
+                    <Typography variant="body1">
+                      {isOnline
+                        ? "Syncing data to directorate"
+                        : "Waiting for Internet"}
+                    </Typography>
+                  </div>
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
+    );
+};
 
 export default connect(mapStateToProps)(MenuContainer);

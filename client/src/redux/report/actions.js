@@ -1,4 +1,8 @@
-import { SET_SUBJECT_SELECTED, SET_SCHOOL_SELECTED, SET_GRADE_SELECTED } from "./reducer";
+import {
+  SET_SUBJECT_SELECTED,
+  SET_SCHOOL_SELECTED,
+  SET_GRADE_SELECTED,
+} from "./reducer";
 const electron = window.require("electron");
 const typeorm = electron.remote.require("typeorm");
 
@@ -22,9 +26,3 @@ export const setSchoolSelected = (school) => {
     payload: school,
   };
 };
-
-// export const getSubjectWiseChart = (grade) => {
-//   return (dispatch) => {
-//     typeorm.getRepository("subject")
-//   }
-// }

@@ -1,11 +1,12 @@
 import axiosInstance from "../../utils/axiosInstance";
-import { showToast } from '../toast/actions';
+import { showToast } from "../toast/actions";
+// const electron = window.require("electron");
+// const typeorm = electron.remote.require("typeorm");
 
 import {
   TOGGLE_CREATE_STUDENT,
   TOGGLE_CREATE_STAFF,
   ADD_STUDENTS,
-  CREATE_EXAM,
   ENTER_RESULTS_PAGE,
   TOGGLE_CREATE_SCHOOL,
 } from "./reducer";
@@ -31,69 +32,66 @@ export const toggleCreateSchool = (bool) => {
   };
 };
 
-export const createExam = (name) => {
-  return {
-    type: CREATE_EXAM,
-    payload: name
-  }
-}
-
 export const toggleResultsPage = (bool) => {
   return {
     type: ENTER_RESULTS_PAGE,
-    payload: bool
-  }
-}
+    payload: bool,
+  };
+};
 
 export const addStudents = (students) => {
   return {
     type: ADD_STUDENTS,
-    payload: students
-  }
-}
+    payload: students,
+  };
+};
 
 export const createStudent = (body) => {
   return (dispatch) => {
-    axiosInstance.post('/student', body)
+    axiosInstance
+      .post("/student", body)
       .then((res) => {
-        console.log(res)
-        dispatch(showToast('Student Record Created Successfully!'))
+        console.log(res);
+        dispatch(showToast("Student Record Created Successfully!"));
       })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-}
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
 
 export const createStaff = (body) => {
   return (dispatch) => {
-    axiosInstance.post('/teacher', body)
+    axiosInstance
+      .post("/teacher", body)
       .then((res) => {
-        console.log(res)
-        dispatch(showToast('Staff Record Created Successfully!'))
+        console.log(res);
+        dispatch(showToast("Staff Record Created Successfully!"));
       })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-}
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
 
 export const createSchool = (body) => {
   return (dispatch) => {
-    axiosInstance.post('/school', body)
+    axiosInstance
+      .post("/school", body)
       .then((res) => {
-        console.log(res)
-        dispatch(showToast('School Record Created Successfully!'))
+        console.log(res);
+        dispatch(showToast("School Record Created Successfully!"));
       })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-}
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
 
-export const fetchStudents = () => {
-  return (dispatch) => {
-    const students = []
-    dispatch(addStudents(students))
-  }
-}
+// export const fetchStudents = () => {
+//   return (dispatch) => {
+//     const students = typeorm.getRepository("student").find();
+//     console.log(students);
+//     // dispatch(addStudents(students));
+//   };
+// };

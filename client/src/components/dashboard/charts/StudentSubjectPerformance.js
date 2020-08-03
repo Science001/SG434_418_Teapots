@@ -1,22 +1,58 @@
-import React from 'react'
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
-import { connect } from 'react-redux';
+import React from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+import { connect } from "react-redux";
 
 const mapStateToProps = (state) => {
   return {
-    studentSubjectPerformance: state.report.studentSubjectPerformance
-  }
-}
+    studentSubjectPerformance: state.report.studentSubjectPerformance,
+  };
+};
 
 const StudentSubjectPerformance = ({ studentSubjectPerformance }) => {
   return (
-    <RadarChart cx={300} cy={250} outerRadius={150} width={600} height={500} data={studentSubjectPerformance}>
-      <PolarGrid />
-      <PolarAngleAxis dataKey="subject" />
-      <PolarRadiusAxis />
-      <Radar name="Mike" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-    </RadarChart>
+    <BarChart
+      width={600}
+      height={300}
+      data={studentSubjectPerformance}
+      style={{
+        marginTop: "10em",
+      }}
+      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis
+        dataKey="subject"
+        label={{
+          //   value: "District",
+          color: "#F25022",
+          position: "bottom",
+        }}
+      />
+      <YAxis
+        label={{
+          value: "No of Schools",
+          angle: -90,
+          position: "left",
+          color: "#F25022",
+        }}
+      />
+      <Tooltip />
+      <Legend
+        payload={[
+          { value: "Number of Schools", type: "square", color: "#8884d8" },
+        ]}
+      />
+      <Bar dataKey="A" barSize={50} fill="#8884d8" />
+    </BarChart>
   );
-}
+};
 
-export default connect(mapStateToProps)(StudentSubjectPerformance)
+export default connect(mapStateToProps)(StudentSubjectPerformance);

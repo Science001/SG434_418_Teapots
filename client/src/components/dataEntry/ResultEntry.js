@@ -3,6 +3,7 @@ import { connect, useDispatch } from "react-redux";
 import {
   Table,
   TableHead,
+  Button,
   TableRow,
   TableCell,
   TableContainer,
@@ -10,7 +11,10 @@ import {
   TextField,
 } from "@material-ui/core";
 
-import { fetchStudents } from '../../redux/dataEntry/actions'
+import {
+  fetchStudents,
+  toggleResultsPage,
+} from "../../redux/dataEntry/actions";
 
 const mapStateToProps = (state) => {
   return {
@@ -19,12 +23,25 @@ const mapStateToProps = (state) => {
   };
 };
 
-const ResultEntry = ({ students, subjects }) => {
-  const dispatch = useDispatch()
+const ResultEntry = ({
+  examName,
+  students,
+  subjects,
+  pushToDrafts,
+  pushToOutbox,
+}) => {
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchStudents())
-  }, [dispatch])
-
+    // dispatch(fetchStudents());
+  }, [dispatch]);
+  const handleSave = () => {
+    pushToDrafts(examName);
+    dispatch(toggleResultsPage(false));
+  };
+  const handleSubmit = () => {
+    pushToOutbox(examName);
+    dispatch(toggleResultsPage(false));
+  };
   return (
     <div>
       <TableContainer>
@@ -39,20 +56,36 @@ const ResultEntry = ({ students, subjects }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {students.map((student, idx) =>
-              <TableRow key={idx + 1}>
-                <TableCell>{idx}</TableCell>
+            {students.map((student, idx) => (
+              <TableRow key={idx}>
+                <TableCell>{idx + 1}</TableCell>
                 <TableCell>{student}</TableCell>
                 {subjects.map((subject, idx) => (
                   <TableCell key={idx}>
-                    <TextField label={subject} />
+                    <TextField label={`${subject} Marks`} />
                   </TableCell>
                 ))}
-              </TableRow>)
-            }
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <Button
+        variant="contained"
+        style={{ float: "right", marginTop: "2em" }}
+        color="primary"
+        onClick={() => handleSubmit()}
+      >
+        {"Publish"}
+      </Button>
+      <Button
+        variant="outl"
+        color="primary"
+        onClick={handleSave}
+        style={{ float: "right", marginRight: "2em", marginTop: "2em" }}
+      >
+        {"Save as Draft"}
+      </Button>
     </div>
   );
 };

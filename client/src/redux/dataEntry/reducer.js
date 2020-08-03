@@ -1,9 +1,9 @@
 export const TOGGLE_CREATE_STUDENT = "TOGGLE_CREATE_STUDENT";
 export const TOGGLE_CREATE_STAFF = "TOGGLE_CREATE_STAF";
 export const TOGGLE_CREATE_SCHOOL = "TOGGLE_CREATE_SCHOOL";
-export const CREATE_EXAM = 'CREATE_EXAM'
-export const ENTER_RESULTS_PAGE = 'ENTER_RESULTS_PAGE'
-export const ADD_STUDENTS = 'ADD_STUDENTS'
+export const CREATE_EXAM = "CREATE_EXAM";
+export const ENTER_RESULTS_PAGE = "ENTER_RESULTS_PAGE";
+export const ADD_STUDENTS = "ADD_STUDENTS";
 
 const initialState = {
   isCreateStudentModalOpen: false,
@@ -12,7 +12,7 @@ const initialState = {
   subjects: ["Science", "Maths", "Social"],
   examResults: [],
   enterResultsPage: false,
-  students: ['Ramesh', 'Suresh', 'Rajesh']
+  students: ["Ramesh", "Suresh", "Rajesh"],
 };
 
 const dataEntryReducer = (state = initialState, action) => {
@@ -32,24 +32,13 @@ const dataEntryReducer = (state = initialState, action) => {
     case ADD_STUDENTS:
       return {
         ...state,
-        students: action.payload
-      }
-    case CREATE_EXAM: {
-      const newExams = state.examResults.push({
-        exam: action.payload,
-        subjects: [],
-        results: []
-      })
-      return {
-        ...state,
-        exams: newExams
-      }
-    }
+        students: action.payload,
+      };
     case ENTER_RESULTS_PAGE:
       return {
         ...state,
-        enterResultsPage: action.payload
-      }
+        enterResultsPage: action.payload,
+      };
     default:
       return state;
   }
