@@ -26,11 +26,7 @@ const GradeWiseDist = ({ gradeWiseDist }) => {
       height={500}
       data={gradeWiseDist}
       style={{
-        position: "absolute",
-        cursor: "default",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
+        marginTop: '1em'
       }}
       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
       onClick={(data) => dispatch(setGradeSelected(data.activeLabel))}

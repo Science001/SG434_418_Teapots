@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch } from 'react-redux'
 import PropTypes from "prop-types";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,6 +13,7 @@ import Paper from "@material-ui/core/Paper";
 
 import "./css/listTable.css";
 import StudentModal from "./StudentModal";
+import { setGradeSelected, setSchoolSelected } from '../../redux/report/actions'
 
 const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
@@ -80,12 +82,14 @@ ListTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const ListTable = ({ data, dataHead }) => {
+const ListTable = ({ data, dataHead, title }) => {
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("calories");
+  const [orderBy, setOrderBy] = useState("rollNo");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const dispatch = useDispatch()
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -94,7 +98,9 @@ const ListTable = ({ data, dataHead }) => {
   };
 
   const handleClick = (_event, row) => {
-    setModalOpen(true);
+    if (title === 'students') setModalOpen(true);
+    else if (title === 'grades') dispatch(setGradeSelected(row.grade))
+    else dispatch(setSchoolSelected(row.name))
   };
 
   const handleChangePage = (_event, newPage) => {
@@ -132,36 +138,68 @@ const ListTable = ({ data, dataHead }) => {
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row)}
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.rollNo}
-                    >
-                      <TableCell align="center">{row.rollNo}</TableCell>
-
-                      <TableCell
-                        align="center"
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
+                    title === 'students' ?
+                      <TableRow
+                        hover
+                        onClick={(event) => handleClick(event, row)}
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.rollNo}
                       >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="center">{row.sub1}</TableCell>
-                      <TableCell align="center">{row.sub2}</TableCell>
-                      <TableCell align="center">{row.sub3}</TableCell>
-                      <TableCell align="center">{row.sub4}</TableCell>
-                      <TableCell align="center">{row.sub5}</TableCell>
-                      <TableCell align="center">{row.avg}</TableCell>
-                      <StudentModal
-                        isOpen={modalOpen}
-                        closeModal={() => setModalOpen(false)}
-                        student={row}
-                      />
-                    </TableRow>
+                        <TableCell align="center">{row.rollNo}</TableCell>
+
+                        <TableCell
+                          align="center"
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {row.name}
+                        </TableCell>
+                        <TableCell align="center">{row.sub1}</TableCell>
+                        <TableCell align="center">{row.sub2}</TableCell>
+                        <TableCell align="center">{row.sub3}</TableCell>
+                        <TableCell align="center">{row.sub4}</TableCell>
+                        <TableCell align="center">{row.sub5}</TableCell>
+                        <TableCell align="center">{row.avg}</TableCell>
+                        <StudentModal
+                          isOpen={modalOpen}
+                          closeModal={() => setModalOpen(false)}
+                          student={row}
+                        />
+                      </TableRow> :
+                      title === 'grades' ?
+                        <TableRow
+                          hover
+                          onClick={(event) => handleClick(event, row)}
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={row.grade}
+                        >
+                          <TableCell align="center">{row.grade}</TableCell>
+                          <TableCell align="center">{row.staff}</TableCell>
+                          <TableCell align="center">{row.strength}</TableCell>
+                          <TableCell align="center">{row.highest}</TableCell>
+                          <TableCell align="center">{row.lowest}</TableCell>
+                          <TableCell align="center">{row.avg}</TableCell>
+                          <TableCell align="center">{row.pass}</TableCell>
+                        </TableRow> :
+                        <TableRow
+                          hover
+                          onClick={(event) => handleClick(event, row)}
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={row.no}
+                        >
+                          <TableCell align="center">{row.no}</TableCell>
+                          <TableCell align="center">{row.school}</TableCell>
+                          <TableCell align="center">{row.strength}</TableCell>
+                          <TableCell align="center">{row.district}</TableCell>
+                          <TableCell align="center">{row.avg}</TableCell>
+                          <TableCell align="center">{row.pass}</TableCell>
+                          <TableCell align="center">{row.fail}</TableCell>
+                        </TableRow>
                   );
                 })}
               {emptyRows > 0 && (

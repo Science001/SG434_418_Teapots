@@ -79,7 +79,7 @@ const TeacherView = ({ currentUser, gradeSelected, students }) => {
           </span>
         </Grid>
       </Grid>
-      <ListTable data={students} dataHead={headCells} />
+      <ListTable data={students} dataHead={headCells} title='students' />
     </div>
   );
 };

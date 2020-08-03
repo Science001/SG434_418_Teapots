@@ -1,12 +1,11 @@
 export const SET_SUBJECT_SELECTED = "SET_SUBJECT_SELECTED";
 export const SET_GRADE_SELECTED = "SET_GRADE_SELECTED";
+export const SET_SCHOOL_SELECTED = "SET_SCHOOL_SELECTED";
 
 const initialState = {
   students: [
     {
       rollNo: 1,
-      section: "",
-      gender: "",
       name: "Rithik",
       sub1: 75,
       sub2: 80,
@@ -59,13 +58,12 @@ const initialState = {
   grades: [
     {
       grade: 1,
-      strength: 60,
-      sub1: "Hindi",
-      sub2: "English",
-      sub3: "Maths",
-      sub4: "Science",
-      sub5: "Social",
       staff: "Trisha",
+      strength: 60,
+      highest: 90,
+      lowest: 78,
+      avg: 56,
+      pass: 67
     },
     {
       grade: 2,
@@ -282,9 +280,21 @@ const initialState = {
     { class: "11", Strength: 3490 },
     { class: "12", Strength: 3490 },
   ],
-  gradeSelected: null,
-  currentSchool: "",
+  schoolsPerDistrict: [
+    { District: "North Sikkim", Schools: 2780 },
+    { District: "West Sikkim", Schools: 1890 },
+    { District: "East Sikkim", Schools: 2390 },
+    { District: "South Sikkim", Schools: 3490 },
+  ],
+  ger: [
+    { name: '2017', uv: 2000, pv: 9800, amt: 2290 },
+    { name: '2018', uv: 2780, pv: 3908, amt: 2000 },
+    { name: '2019', uv: 1890, pv: 4800, amt: 2181 },
+    { name: '2020', uv: 2390, pv: 3800, amt: 2500 },
+  ],
   subjectSelected: null,
+  gradeSelected: null,
+  schoolSelected: null,
 };
 
 const reportReducer = (state = initialState, action) => {
@@ -298,6 +308,11 @@ const reportReducer = (state = initialState, action) => {
       return {
         ...state,
         gradeSelected: action.payload,
+      };
+    case SET_SCHOOL_SELECTED:
+      return {
+        ...state,
+        schoolSelected: action.payload,
       };
     default:
       return state;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { connect, useDispatch } from 'react-redux'
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -11,13 +12,24 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 
-const CreateStudentModal = ({ isOpen, handleClose }) => {
+import { createStudent } from '../../redux/dataEntry/actions'
+
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.auth.currentUser,
+  }
+}
+
+const CreateStudentModal = ({ currentUser, isOpen, handleClose }) => {
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
 
+  const dispatch = useDispatch()
+
   const handleSubmit = () => {
-    const body = { name: name, gender: gender };
+    const body = { name, gender };
     console.log(body);
+    dispatch(createStudent(body))
     handleClose();
   };
 
@@ -26,15 +38,26 @@ const CreateStudentModal = ({ isOpen, handleClose }) => {
       <DialogTitle onClose={handleClose}>{"Create Student"}</DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={3}>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <TextField
               label="Name"
               variant="outlined"
               value={name}
               onChange={(e) => setName(e.target.value)}
+            /></Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <TextField
+              label="Grade"
+              disabled
+              variant="outlined"
+              value={currentUser.grade}
             />
           </Grid>
-          <Grid item xs={6}>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
             <FormControl variant="outlined" style={{ width: "100%" }}>
               <InputLabel id="gender-select-helper-label">
                 {"Gender"}
@@ -66,4 +89,4 @@ const CreateStudentModal = ({ isOpen, handleClose }) => {
   );
 };
 
-export default CreateStudentModal;
+export default connect(mapStateToProps)(CreateStudentModal);
