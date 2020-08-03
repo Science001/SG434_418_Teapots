@@ -5,6 +5,7 @@ import SchoolsPerDistrict from './charts/SchoolsPerDistrict'
 import GER from './charts/GER'
 import PrincipalView from './PrincipalView'
 import ListTable from './ListTable'
+import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
@@ -46,4 +47,4 @@ const DirectorateView = ({ schools, schoolSelected }) => {
   );
 }
 
-export default DirectorateView;
+export default connect(mapStateToProps)(DirectorateView);

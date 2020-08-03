@@ -1,14 +1,18 @@
-import React from "react";
-import { Grid } from "@material-ui/core";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button"
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import { connect, useDispatch } from "react-redux";
 
 import "./css/principalView.css";
 import GradeWiseDist from "./charts/GradeWiseDist";
 import TeacherView from "./TeacherView";
 import ListTable from "./ListTable";
+import { setSchoolSelected } from '../../redux/report/actions';
 
 const mapStateToProps = (state) => {
   return {
+    role: state.auth.currentUser.role,
     gradeSelected: state.report.gradeSelected,
     grades: state.report.grades
   };
@@ -24,9 +28,22 @@ const headCells = [
   { id: "pass", numeric: true, disablePadding: false, label: "Pass Percentage" },
 ];
 
-const PrincipalView = ({ grades, gradeSelected }) => {
+const PrincipalView = ({ role, grades, gradeSelected }) => {
+  const dispatch = useDispatch(setSchoolSelected)
   return (
     <>
+      {role === "directorate" && (
+        <Button
+          edge="start"
+          onClick={() => dispatch(setSchoolSelected(null))}
+          color="secondary"
+          size="large"
+          startIcon={<ChevronLeftIcon />}
+          style={{ marginBottom: "1rem" }}
+        >
+          {"Go Home"}
+        </Button>
+      )}
       {gradeSelected === null ? (
         <Grid container spacing={3}>
           <GradeWiseDist />
